@@ -1,14 +1,14 @@
-/**
- * Root application component.
- * Renders a placeholder until the Board component is wired up in a later PR.
- */
-function App() {
+import Board from './components/Board.jsx';
+
+export default function App() {
   return (
     <div className="app">
-      <h1>Kanban Board</h1>
-      <p>Board coming soon.</p>
+      <header className="app-header">
+        <h1>Kanban Board</h1>
+      </header>
+      <main>
+        <Board />
+      </main>
     </div>
   );
 }
-
-export default App;
