@@ -1,10 +1,11 @@
-// Column routes: GET, POST, PUT, DELETE /api/columns
+// Column routes: GET, POST, PUT, PATCH /reorder, DELETE /api/columns
 import { Router } from 'express';
 import {
   getColumns,
   createColumn,
   updateColumn,
   deleteColumn,
+  reorderColumns,
 } from '../data/store.js';
 
 const router = Router();
@@ -30,6 +31,14 @@ router.put('/:id', (req, res) => {
   const column = updateColumn(req.params.id, title.trim());
   if (!column) return res.status(404).json({ error: 'column not found' });
   res.json(column);
+});
+
+// PATCH /reorder must come before /:id routes so Express does not treat "reorder" as an id.
+router.patch('/reorder', (req, res) => {
+  const { ids } = req.body;
+  if (!Array.isArray(ids)) return res.status(400).json({ error: 'ids must be an array' });
+  reorderColumns(ids);
+  res.json(getColumns());
 });
 
 router.delete('/:id', (req, res) => {

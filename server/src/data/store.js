@@ -115,6 +115,14 @@ export function deleteCard(cardId) {
   return false;
 }
 
+// Updates each column's order to match the position of its id in the given array.
+export function reorderColumns(ids) {
+  ids.forEach((id, index) => {
+    const col = findColumn(id);
+    if (col) col.order = index;
+  });
+}
+
 // Wipes the store and reseeds the default columns. Used in tests.
 export function resetStore() {
   columns = freshColumns();

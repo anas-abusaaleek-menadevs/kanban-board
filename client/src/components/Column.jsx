@@ -1,8 +1,9 @@
 import { useState } from 'react';
+import { Droppable, Draggable } from '@hello-pangea/dnd';
 import Card from './Card.jsx';
 import AddCardForm from './AddCardForm.jsx';
 
-export default function Column({ column, onAddCard, onUpdateCard, onDeleteCard, onUpdateColumn, onDeleteColumn }) {
+export default function Column({ column, dragHandleProps, onAddCard, onUpdateCard, onDeleteCard, onUpdateColumn, onDeleteColumn }) {
   const [editingTitle, setEditingTitle] = useState(false);
   const [title, setTitle] = useState(column.title);
 
@@ -16,7 +17,7 @@ export default function Column({ column, onAddCard, onUpdateCard, onDeleteCard, 
 
   return (
     <div className="column">
-      <div className="column__header">
+      <div className="column__header" {...dragHandleProps}>
         {editingTitle ? (
           <form onSubmit={handleTitleSave} className="column__title-form">
             <input
@@ -40,16 +41,34 @@ export default function Column({ column, onAddCard, onUpdateCard, onDeleteCard, 
         )}
       </div>
 
-      <div className="column__cards">
-        {column.cards.map((card) => (
-          <Card
-            key={card.id}
-            card={card}
-            onUpdate={onUpdateCard}
-            onDelete={onDeleteCard}
-          />
-        ))}
-      </div>
+      <Droppable droppableId={column.id} type="CARD">
+        {(provided) => (
+          <div
+            className="column__cards"
+            ref={provided.innerRef}
+            {...provided.droppableProps}
+          >
+            {column.cards.map((card, index) => (
+              <Draggable key={card.id} draggableId={card.id} index={index}>
+                {(provided) => (
+                  <div
+                    ref={provided.innerRef}
+                    {...provided.draggableProps}
+                    {...provided.dragHandleProps}
+                  >
+                    <Card
+                      card={card}
+                      onUpdate={onUpdateCard}
+                      onDelete={onDeleteCard}
+                    />
+                  </div>
+                )}
+              </Draggable>
+            ))}
+            {provided.placeholder}
+          </div>
+        )}
+      </Droppable>
 
       <AddCardForm onAdd={(cardTitle) => onAddCard(column.id, cardTitle)} />
     </div>

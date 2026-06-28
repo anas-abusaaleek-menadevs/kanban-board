@@ -7,6 +7,7 @@ const api = axios.create({ baseURL: '/api' });
 export const getColumns = () => api.get('/columns').then((r) => r.data);
 export const createColumn = (title) => api.post('/columns', { title }).then((r) => r.data);
 export const updateColumn = (id, title) => api.put(`/columns/${id}`, { title }).then((r) => r.data);
+export const reorderColumns = (ids) => api.patch('/columns/reorder', { ids }).then((r) => r.data);
 export const deleteColumn = (id) => api.delete(`/columns/${id}`);
 
 // Cards
