@@ -1,3 +1,5 @@
+// Renders a single column with its header, card list, and add-card form.
+// The header doubles as the drag handle for column reordering.
 import { useState } from 'react';
 import { Droppable, Draggable } from '@hello-pangea/dnd';
 import Card from './Card.jsx';
@@ -41,6 +43,7 @@ export default function Column({ column, dragHandleProps, onAddCard, onUpdateCar
         )}
       </div>
 
+      {/* Each column is its own Droppable so cards can be dragged between columns. */}
       <Droppable droppableId={column.id} type="CARD">
         {(provided) => (
           <div

@@ -1,6 +1,7 @@
+// Toggled inline form at the bottom of each column.
+// Shows a button by default and expands into an input when clicked.
 import { useState } from 'react';
 
-// Small inline form that sits at the bottom of each column.
 export default function AddCardForm({ onAdd }) {
   const [title, setTitle] = useState('');
   const [open, setOpen] = useState(false);
@@ -10,6 +11,7 @@ export default function AddCardForm({ onAdd }) {
     const trimmed = title.trim();
     if (!trimmed) return;
     onAdd(trimmed);
+    // Reset and collapse the form after a successful add.
     setTitle('');
     setOpen(false);
   }
