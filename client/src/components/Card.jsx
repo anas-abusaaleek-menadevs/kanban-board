@@ -1,3 +1,4 @@
+// Displays a card in read mode and switches to an inline edit form when clicked.
 import { useState } from 'react';
 
 export default function Card({ card, onUpdate, onDelete }) {

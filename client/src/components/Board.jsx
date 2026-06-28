@@ -1,3 +1,4 @@
+// Owns all board state and wires up drag-and-drop for both cards and columns.
 import { useEffect, useState } from 'react';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import Column from './Column.jsx';
@@ -89,6 +90,7 @@ export default function Board() {
 
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
+      {/* The outer Droppable makes the column strip itself a drop target for column reordering. */}
       <Droppable droppableId="board" direction="horizontal" type="COLUMN">
         {(provided) => (
           <div
