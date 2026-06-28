@@ -3,8 +3,8 @@ primary_language:     JavaScript
 domain:               web
 short_description:    Kanban board with drag-and-drop, column and card management, and a Node.js REST API backend
 
-snapshot_commit:      # fill in after final PR is merged
-snapshot_date:        # YYYY-MM-DD
+snapshot_commit:      8ec103323a6b9bd4810c6381c6868197b17fc2cc
+snapshot_date:        2026-06-28
 
 # --- computed by the validation toolkit (leave blank; do not hand-edit) ---
 lines_of_code:
