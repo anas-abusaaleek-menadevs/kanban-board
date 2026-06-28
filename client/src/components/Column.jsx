@@ -6,11 +6,13 @@ import Card from './Card.jsx';
 import AddCardForm from './AddCardForm.jsx';
 
 export default function Column({ column, dragHandleProps, onAddCard, onUpdateCard, onDeleteCard, onUpdateColumn, onDeleteColumn }) {
+  // editingTitle toggles between the static heading and the inline rename input.
   const [editingTitle, setEditingTitle] = useState(false);
   const [title, setTitle] = useState(column.title);
 
   function handleTitleSave(e) {
     e.preventDefault();
+    // Prevent saving a blank title.
     const trimmed = title.trim();
     if (!trimmed) return;
     onUpdateColumn(column.id, trimmed);
@@ -73,6 +75,7 @@ export default function Column({ column, dragHandleProps, onAddCard, onUpdateCar
         )}
       </Droppable>
 
+      {/* AddCardForm always sits below the card list and binds the column id for the parent. */}
       <AddCardForm onAdd={(cardTitle) => onAddCard(column.id, cardTitle)} />
     </div>
   );

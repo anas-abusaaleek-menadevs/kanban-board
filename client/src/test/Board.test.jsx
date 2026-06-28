@@ -1,3 +1,5 @@
+// Tests for the Board component covering loading state, error handling, and data rendering.
+// The API module and the dnd library are both mocked so tests run in jsdom without side effects.
 import { render, screen, waitFor } from '@testing-library/react';
 import { vi } from 'vitest';
 import Board from '../components/Board.jsx';
@@ -24,6 +26,7 @@ vi.mock('@hello-pangea/dnd', () => ({
 
 import * as api from '../api/kanban.js';
 
+// Sample columns used to seed the mocked API. col-2 includes one card.
 const sampleColumns = [
   { id: 'col-1', title: 'To Do', order: 0, cards: [] },
   { id: 'col-2', title: 'In Progress', order: 1, cards: [
@@ -31,11 +34,13 @@ const sampleColumns = [
   ]},
 ];
 
+// Clear all mock call history before each test to prevent cross-test contamination.
 beforeEach(() => {
   vi.clearAllMocks();
 });
 
 describe('Board', () => {
+  // A never-resolving promise keeps the component in the loading state for this test.
   it('shows a loading message before data arrives', () => {
     api.getColumns.mockReturnValue(new Promise(() => {}));
     render(<Board />);
@@ -51,6 +56,7 @@ describe('Board', () => {
     });
   });
 
+  // Cards are nested inside columns; both must appear after the promise resolves.
   it('renders cards inside their column', async () => {
     api.getColumns.mockResolvedValue(sampleColumns);
     render(<Board />);
@@ -59,6 +65,7 @@ describe('Board', () => {
     });
   });
 
+  // A rejected promise triggers the error branch and shows the fallback message.
   it('shows an error message when the API fails', async () => {
     api.getColumns.mockRejectedValue(new Error('network error'));
     render(<Board />);

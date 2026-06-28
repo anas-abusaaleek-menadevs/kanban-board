@@ -18,6 +18,7 @@ export default function Board() {
       .finally(() => setLoading(false));
   }, []);
 
+  // Refetches all columns from the server after any mutation.
   async function refresh() {
     const data = await api.getColumns();
     setColumns(data);
@@ -25,7 +26,9 @@ export default function Board() {
 
   async function handleDragEnd(result) {
     const { source, destination, type, draggableId } = result;
+    // A null destination means the user released the drag outside a valid drop area.
     if (!destination) return;
+    // Skip if the item was dropped back in exactly the same position.
     if (source.droppableId === destination.droppableId && source.index === destination.index) return;
 
     if (type === 'CARD') {
@@ -50,6 +53,7 @@ export default function Board() {
     }
   }
 
+  // Validates the title, creates the column, then collapses the form.
   async function handleAddColumn(e) {
     e.preventDefault();
     const trimmed = newColTitle.trim();
@@ -60,6 +64,7 @@ export default function Board() {
     refresh();
   }
 
+  // The handlers below follow the same pattern: call the API then refresh the board.
   async function handleUpdateColumn(id, title) {
     await api.updateColumn(id, title);
     refresh();
@@ -85,6 +90,7 @@ export default function Board() {
     refresh();
   }
 
+  // Show feedback before data arrives or if the initial fetch fails.
   if (loading) return <p className="board-message">Loading board...</p>;
   if (error) return <p className="board-message board-message--error">{error}</p>;
 

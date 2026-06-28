@@ -29,6 +29,7 @@ router.put('/cards/:id', (req, res) => {
   if (title !== undefined && (typeof title !== 'string' || !title.trim())) {
     return res.status(400).json({ error: 'title must be a non-empty string' });
   }
+  // Both fields are optional. Omitting one leaves the existing value unchanged.
   const card = updateCard(req.params.id, {
     title: title?.trim(),
     description,

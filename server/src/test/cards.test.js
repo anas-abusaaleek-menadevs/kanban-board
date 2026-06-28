@@ -1,7 +1,11 @@
+// Integration tests for the card REST API routes.
+// Helper functions at the top keep individual tests concise and focused.
+// The store resets before each test so card and column ids never bleed between cases.
 import request from 'supertest';
 import app from '../index.js';
 import { resetStore } from '../data/store.js';
 
+// Wipe the store before each test to prevent state from leaking.
 beforeEach(() => resetStore());
 
 /** Helper: get the first column id from a fresh store. */
@@ -19,6 +23,7 @@ async function createCard(title = 'Test card', description = '') {
   return res.body;
 }
 
+// Creating cards - validates the response shape, column assignment, and error handling.
 describe('POST /api/columns/:columnId/cards', () => {
   it('creates a card and returns 201', async () => {
     const colId = await firstColumnId();
@@ -46,6 +51,7 @@ describe('POST /api/columns/:columnId/cards', () => {
     expect(res.statusCode).toBe(404);
   });
 
+  // Confirm the card is visible through a GET, not just the creation response.
   it('card appears inside the column after creation', async () => {
     const colId = await firstColumnId();
     await request(app)
@@ -57,6 +63,7 @@ describe('POST /api/columns/:columnId/cards', () => {
   });
 });
 
+// Updating cards - title and description can each be changed independently.
 describe('PUT /api/cards/:id', () => {
   it('updates card title', async () => {
     const card = await createCard('Original');
@@ -84,6 +91,7 @@ describe('PUT /api/cards/:id', () => {
   });
 });
 
+// Moving cards between columns - the response must reflect the new columnId.
 describe('PATCH /api/cards/:id/move', () => {
   it('moves a card to another column', async () => {
     const card = await createCard('Move me');
@@ -97,6 +105,7 @@ describe('PATCH /api/cards/:id/move', () => {
     expect(res.body.columnId).toBe(targetId);
   });
 
+  // Both columnId and a numeric order are required; missing either is a 400.
   it('returns 400 when columnId is missing', async () => {
     const card = await createCard('Card');
     const res = await request(app)
@@ -114,6 +123,7 @@ describe('PATCH /api/cards/:id/move', () => {
   });
 });
 
+// Deleting cards - checks 204, confirms absence from the column, and 404 for unknown ids.
 describe('DELETE /api/cards/:id', () => {
   it('deletes a card and returns 204', async () => {
     const card = await createCard('Delete me');
@@ -121,6 +131,7 @@ describe('DELETE /api/cards/:id', () => {
     expect(res.statusCode).toBe(204);
   });
 
+  // Read back the full column list to confirm the card is gone, not just that the status was 204.
   it('deleted card no longer appears in the column', async () => {
     const colId = await firstColumnId();
     const card = await createCard('Delete me');

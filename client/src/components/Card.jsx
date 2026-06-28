@@ -8,12 +8,14 @@ export default function Card({ card, onUpdate, onDelete }) {
 
   function handleSave(e) {
     e.preventDefault();
+    // Prevent saving if the user cleared the title entirely.
     const trimmed = title.trim();
     if (!trimmed) return;
     onUpdate(card.id, { title: trimmed, description });
     setEditing(false);
   }
 
+  // Render the edit form in place of the card view while editing is active.
   if (editing) {
     return (
       <div className="card card--editing">

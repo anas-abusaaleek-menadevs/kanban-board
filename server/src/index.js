@@ -16,6 +16,8 @@ app.get('/api/health', (_req, res) => {
   res.json({ status: 'ok' });
 });
 
+// Column routes handle CRUD and reorder. Card routes are mounted at /api directly
+// because card paths include the column id in the URL.
 app.use('/api/columns', columnRoutes);
 app.use('/api', cardRoutes);
 

@@ -10,6 +10,7 @@ import {
 
 const router = Router();
 
+// Return all columns sorted by order.
 router.get('/', (_req, res) => {
   res.json(getColumns());
 });
@@ -41,6 +42,7 @@ router.patch('/reorder', (req, res) => {
   res.json(getColumns());
 });
 
+// Removing a column also removes all its cards as a side effect in the store.
 router.delete('/:id', (req, res) => {
   const removed = deleteColumn(req.params.id);
   if (!removed) return res.status(404).json({ error: 'column not found' });
