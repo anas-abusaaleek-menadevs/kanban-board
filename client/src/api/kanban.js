@@ -9,6 +9,7 @@ export const createColumn = (title) => api.post('/columns', { title }).then((r) 
 export const updateColumn = (id, title) => api.put(`/columns/${id}`, { title }).then((r) => r.data);
 // Sends the full ordered id list so the server can update each column's order field.
 export const reorderColumns = (ids) => api.patch('/columns/reorder', { ids }).then((r) => r.data);
+// deleteColumn and deleteCard accept only the resource id and return no body.
 export const deleteColumn = (id) => api.delete(`/columns/${id}`);
 
 // Cards
